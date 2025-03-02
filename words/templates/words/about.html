@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About Crypto Buzzword Dictionary</title>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #800080;
+      }
+
+      .header {
+        background-color: #800080;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header h1 {
+        color: #ffff00;
+        margin: 0;
+      }
+
+      .nav {
+        text-align: center;
+        padding: 10px;
+      }
+
+      .nav a {
+        color: #ffff00;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+
+      .dotted-line {
+        border-top: 3px dotted #ffff00;
+        margin: 0;
+      }
+
+      .content {
+        background-color: #000080;
+        padding: 40px;
+        margin: 20px;
+        color: white;
+      }
+
+      .content h2 {
+        color: white;
+        margin-bottom: 20px;
+      }
+
+      .content p {
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .footer {
+        text-align: center;
+        color: #ffff00;
+        padding: 20px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>About Crypto Buzzword Dictionary</h1>
+      <div class="nav">
+        <a href="{% url 'index' %}">Home</a> |
+        <a href="{% url 'about' %}">About</a> |
+        <a href="#">Submit a Word</a>
+      </div>
+    </div>
+
+    <div class="dotted-line"></div>
+
+    <div class="content">
+      <h2>My Crypto Journey</h2>
+      <p>
+        I've been navigating the crypto world for a while now, and while it's
+        been an exciting ride, I'm constantly bombarded with new slang and
+        terms. It feels like a never-ending learning curve!
+      </p>
+
+      <p>
+        That's why I created this Crypto Buzzword Dictionary. It's my attempt to
+        keep up with the game and hopefully help others who feel the same way.
+        Whether you're a newbie or a seasoned crypto enthusiast, this dictionary
+        is for you. Let's learn and stay updated together!
+      </p>
+
+      <p>Cheers!</p>
+    </div>
+
+    <div class="footer">2024 My Crypto Dictionary. All rights reserved.</div>
+  </body>
+</html>

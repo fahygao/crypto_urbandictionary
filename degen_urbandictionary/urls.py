@@ -21,5 +21,7 @@ from words.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('',WordsView.as_view(), name='anything')
+    path("words/", index),
+    path('', include('words.urls')),
+    path('',WordsView.as_view(), name='anything'),
 ]
