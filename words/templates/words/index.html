@@ -306,7 +306,7 @@
                     class="flex justify-between mt-4 pt-4 border-t border-indigo-700"
                   >
                     <div class="text-xs text-gray-400">
-                      <div>Published: {{ word.pub_date|date:"M d" }}</div>
+                      <div>Published: {{ word.pub_date|date:"M d, Y" }}</div>
                       <div>By: {{ word.creator|default:"Anonymous" }}</div>
                     </div>
                     <div class="flex space-x-3 hidden">
@@ -652,7 +652,9 @@
                 const formattedDate =
                   currentDate.toLocaleString("default", { month: "short" }) +
                   " " +
-                  currentDate.getDate();
+                  currentDate.getDate() +
+                  ", " +
+                  currentDate.getFullYear();
 
                 newCard.innerHTML = `
                 <div class="flip-card-inner">
