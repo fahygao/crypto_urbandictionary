@@ -78,11 +78,6 @@ def submit_word(request):
         example = request.POST.get('example', '')
         
         word_count = len(definition.split())
-        if word_count < 10:
-            return JsonResponse({
-                'success': False,
-                'error': 'Definition must be at least 10 words long.'
-            })
         if word_count > 20:
             return JsonResponse({
                 'success': False,
