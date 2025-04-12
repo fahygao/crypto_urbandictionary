@@ -36,6 +36,10 @@ class WordsView(APIView):
     def post(self,request):
         serializer = WordsSerializer(data = request.data)
         if serializer.is_valid(raise_exception = True):
+            # Set is_approved based on superuser status
+            if request.user.is_authenticated and request.user.is_superuser:
+                serializer.validated_data['is_approved'] = True
+            
             serializer.save()
             return Response(serializer.data)
 
@@ -87,11 +91,15 @@ def submit_word(request):
             
         try:
             creator = request.user.username if request.user.is_authenticated else "Anonymous"
+            # Auto-approve words submitted by superadmins
+            is_approved = request.user.is_authenticated and request.user.is_superuser
+            
             new_word = Definition.objects.create(
                 word=word,
                 definition=definition,
                 example=example,
-                creator=creator
+                creator=creator,
+                is_approved=is_approved
             )
             return JsonResponse({
                 'success': True,
