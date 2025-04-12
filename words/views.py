@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from . models import *
@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from . serializer import *
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
 
 
 def index(request):
@@ -56,3 +58,47 @@ def vote(request):
         
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'})
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+@user_passes_test(is_admin)
+def submission_view(request):
+    return render(request, 'words/submission.html')
+
+@csrf_exempt
+def submit_word(request):
+    if request.method == 'POST':
+        word = request.POST.get('word')
+        definition = request.POST.get('definition')
+        example = request.POST.get('example', '')
+        
+        if len(definition.split()) < 10:
+            return JsonResponse({
+                'success': False,
+                'error': 'Definition must be at least 10 words long.'
+            })
+            
+        try:
+            creator = request.user.username if request.user.is_authenticated else "Anonymous"
+            new_word = Definition.objects.create(
+                word=word,
+                definition=definition,
+                example=example,
+                creator=creator
+            )
+            return JsonResponse({
+                'success': True,
+                'word_id': new_word.id,
+                'creator': creator
+            })
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            })
+            
+    return JsonResponse({
+        'success': False,
+        'error': 'Invalid request method.'
+    })

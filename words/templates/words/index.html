@@ -1,264 +1,261 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Crypto Buzzword Dictionary</title>
-    <meta charset="utf-8" />
-    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/pe-icon-7-stroke.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/rotating-card.css' %}" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Urban Dictionary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link
-      href="https://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        background-color: #800080;
+      .flip-card {
+        perspective: 1000px;
+        min-height: 220px;
       }
-
-      .header {
-        background-color: #800080;
-        padding: 20px;
-        text-align: center;
-      }
-
-      .header h1 {
-        color: #ffff00;
-        margin: 0;
-      }
-
-      .nav {
-        text-align: center;
-        padding: 10px;
-      }
-
-      .nav a {
-        color: #ffff00;
-        text-decoration: none;
-        margin: 0 10px;
-      }
-
-      .google-signin {
-        background-color: #ffff00;
-        padding: 20px;
-        margin: 20px;
-        text-align: center;
-      }
-
-      .buzzword-count {
-        background-color: #ffff00;
-        padding: 10px;
-        margin: 20px;
-        text-align: center;
-      }
-
-      .dotted-line {
-        border-top: 3px dotted #ffff00;
-        margin: 0;
-      }
-
-      .card-container {
-        margin-bottom: 30px;
-        height: 300px;
-        perspective: 800px;
-        position: relative;
-      }
-
-      .card {
-        position: relative;
-        background-color: #000080;
-        height: 300px;
-        border-radius: 10px;
-        overflow: hidden;
+      .flip-card-inner {
+        transition: transform 0.6s;
         transform-style: preserve-3d;
-        transition: transform 0.5s;
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 100%;
       }
-
-      .front,
-      .back {
+      .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+      .flip-card-front,
+      .flip-card-back {
+        backface-visibility: hidden;
         position: absolute;
         width: 100%;
-        height: 100%;
-        backface-visibility: hidden;
-        cursor: pointer;
-      }
-
-      .front {
-        z-index: 2;
-        transform: rotateY(0deg);
-      }
-
-      .back {
-        background-color: #000080;
-        transform: rotateY(180deg);
-      }
-
-      .card-container.hover .card {
-        transform: rotateY(180deg);
-      }
-
-      .back .content {
-        padding: 15px;
-        height: 300px;
-        overflow-y: auto;
-        color: white;
-      }
-
-      .stats-container {
-        margin: 10px 0;
-      }
-
-      .voting {
-        margin-top: 10px;
-      }
-
-      /* Make text more compact on the back */
-      .back .text-center {
-        margin: 5px 0;
-      }
-
-      .back h4 {
-        color: #ffff00;
-        margin: 10px 0;
-      }
-
-      .front .content {
-        background-color: #000080;
+        height: auto;
+        min-height: 100%;
+        top: 0;
+        left: 0;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 300px;
+        flex-direction: column;
       }
-
-      .front .main {
-        text-align: center;
+      .flip-card-back {
+        transform: rotateY(180deg);
       }
-
-      .front .name,
-      .front .profession {
-        color: white;
+      .search-container {
+        transition: all 0.3s ease;
+        overflow: hidden;
+        border-radius: 9999px;
       }
-
-      .name,
-      .profession,
-      .text-center {
-        color: white !important;
+      .search-container.collapsed {
+        width: 50px;
+        background-color: transparent;
       }
-
-      .vote-button {
-        background-color: #ffff00;
-        border: none;
-        padding: 10px 20px;
-        margin: 0 10px;
-        cursor: pointer;
+      .search-container.expanded {
+        width: 100%;
+        background-color: #1f2937; /* bg-gray-800 */
       }
-
-      .vote-count {
-        display: inline-block;
-        margin: 0 10px;
-        color: white;
+      .search-input {
+        transition: all 0.3s ease;
+        background-color: transparent;
       }
-
-      .definition-section,
-      .example-section {
-        margin-bottom: 15px;
+      .search-btn {
+        transition: all 0.3s ease;
+        z-index: 10;
       }
-
+      .search-btn:hover {
+        background-color: #4f46e5 !important;
+      }
+      .search-icon {
+        font-size: 16px;
+        color: #fff;
+      }
+      .hidden-term {
+        display: none !important;
+      }
+      .card-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+      }
       .definition-text {
-        font-size: 1.1em;
-        line-height: 1.4;
-        margin: 10px 0;
+        overflow-y: auto;
+        max-height: 300px;
       }
     </style>
   </head>
-  <body>
-    <div class="header">
-      <h1>Crypto Buzzword Dictionary</h1>
-      <div class="nav">
-        <a href="{% url 'index' %}">Home</a> |
-        <a href="{% url 'about' %}">About</a> |
-        <a href="#">Submit a Word</a>
+  <body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-indigo-900 text-white py-4 px-6 shadow-lg">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Logo"
+            class="h-8 w-auto"
+          />
+          <h1 class="text-2xl font-bold">Crypto Urban Dictionary</h1>
+        </div>
+        <div class="flex space-x-4">
+          {% if user.is_authenticated %}
+          <form action="{% url 'logout' %}" method="post" class="inline">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition"
+            >
+              <i class="fas fa-user-circle mr-2"></i> Logout
+            </button>
+          </form>
+          {% else %}
+          <button
+            id="loginBtn"
+            class="px-4 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg transition"
+          >
+            Login
+          </button>
+          <button
+            id="signupBtn"
+            class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-gray-900 rounded-lg transition"
+          >
+            Sign Up
+          </button>
+          {% endif %}
+        </div>
       </div>
-    </div>
+    </header>
 
-    <div class="dotted-line"></div>
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 px-4">
+      <div class="max-w-4xl mx-auto">
+        <!-- Search Bar -->
+        <div class="mb-8 relative flex justify-end">
+          <div id="searchContainer" class="search-container collapsed relative">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search crypto terms..."
+              class="search-input w-full py-3 px-6 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 opacity-0"
+            />
+            <button
+              id="searchBtn"
+              class="search-btn absolute right-0 top-0 bg-indigo-600 hover:bg-indigo-500 p-2 rounded-full flex items-center justify-center w-12 h-12"
+            >
+              <span class="search-icon">
+                <i class="fas fa-search"></i>
+              </span>
+            </button>
+          </div>
+        </div>
 
-    <div class="google-signin">
-      <img
-        src="{% static 'images/google-icon.png' %}"
-        alt="Google"
-        style="vertical-align: middle; margin-right: 10px"
-      />
-      Sign in with Google
-    </div>
+        <!-- Add New Term (only visible when logged in as admin) -->
+        {% if user.is_authenticated %}
+        <div
+          id="addTermSection"
+          class="mb-8 p-6 bg-gray-800 rounded-xl shadow-lg"
+        >
+          <h2 class="text-xl font-bold mb-4">Add New Term</h2>
+          <form id="addTermForm" method="POST" action="{% url 'submit_word' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label class="block mb-2">Term</label>
+              <input
+                type="text"
+                name="word"
+                class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block mb-2">Example Sentence</label>
+              <textarea
+                name="example"
+                class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                rows="2"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <label class="block mb-2">Definition</label>
+              <textarea
+                name="definition"
+                class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                rows="4"
+                required
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              id="submitTermBtn"
+              class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-medium"
+            >
+              Submit Term
+            </button>
+          </form>
+        </div>
+        {% endif %}
 
-    <div class="buzzword-count">{{ word_count }} Buzzwords Defined!</div>
+        <!-- Dictionary Terms -->
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <i class="fas fa-coins mr-2 text-yellow-400"></i> Popular Crypto Terms
+          <span class="ml-4 text-sm text-gray-400"
+            >{{ word_count }} slangs defined!</span
+          >
+        </h2>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-10 col-sm-offset-1">
+        <div
+          id="termsContainer"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {% for word in words %}
-          <div class="col-md-4 col-sm-6">
-            <div class="card-container">
-              <div class="card">
-                <div class="front">
-                  <div class="content" onclick="rotateCard(this)">
-                    <div class="main">
-                      <h3 class="name">{{ word.word }}</h3>
-                    </div>
+          <div
+            class="flip-card term-card"
+            data-term="{{ word.word|lower }}"
+            data-definition="{{ word.definition|lower }}"
+          >
+            <div class="flip-card-inner">
+              <div
+                class="flip-card-front bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-between"
+              >
+                <div class="card-content">
+                  <h3 class="text-xl font-bold mb-2">{{ word.word }}</h3>
+                  <div class="mt-2 mb-auto">
+                    {% if word.example %}
+                    <p class="text-gray-400 text-sm italic">
+                      "{{ word.example }}"
+                    </p>
+                    {% endif %}
                   </div>
                 </div>
-                <div class="back">
-                  <div class="content" onclick="rotateCard(this)">
-                    <div class="main">
-                      <div class="definition-section">
-                        <h4 class="text-center">Definition</h4>
-                        <p class="text-center definition-text">
-                          {{ word.definition }}
-                        </p>
-                      </div>
+              </div>
+              <div
+                class="flip-card-back bg-indigo-900 p-6 rounded-xl shadow-lg"
+              >
+                <div class="card-content">
+                  <h3 class="text-xl font-bold mb-4">{{ word.word }}</h3>
+                  <p class="text-sm definition-text">{{ word.definition }}</p>
 
-                      {% if word.example %}
-                      <div class="example-section">
-                        <h4 class="text-center">Example</h4>
-                        <p class="text-center">{{ word.example }}</p>
-                      </div>
-                      {% endif %}
-
-                      <div class="stats-container">
-                        <div class="stats">
-                          <h4>{{ word.pub_date|date:"M d" }}</h4>
-                          <p>Published</p>
-                        </div>
-                        <div class="stats">
-                          <h4>{{ word.upvotes }}</h4>
-                          <p>Upvotes</p>
-                        </div>
-                        <div class="stats">
-                          <h4>{{ word.downvotes }}</h4>
-                          <p>Downvotes</p>
-                        </div>
-                      </div>
-
-                      <div class="voting">
-                        <button
-                          class="vote-button"
-                          onclick="event.stopPropagation(); vote('{{ word.id }}', 'up')"
-                        >
-                          Upvote
-                        </button>
-                        <span class="vote-count">{{ word.upvotes }}</span>
-                        <button
-                          class="vote-button"
-                          onclick="event.stopPropagation(); vote('{{ word.id }}', 'down')"
-                        >
-                          Downvote
-                        </button>
-                        <span class="vote-count">{{ word.downvotes }}</span>
-                      </div>
+                  <div
+                    class="flex justify-between mt-4 pt-4 border-t border-indigo-700"
+                  >
+                    <div class="text-xs text-gray-400">
+                      <div>Published: {{ word.pub_date|date:"M d" }}</div>
+                      <div>By: {{ word.creator|default:"Anonymous" }}</div>
+                    </div>
+                    <div class="flex space-x-3 hidden">
+                      <button
+                        onclick="event.stopPropagation(); vote('{{ word.id }}', 'up')"
+                        class="flex items-center text-sm"
+                      >
+                        <i class="fas fa-thumbs-up text-green-400 mr-1"></i>
+                        <span>{{ word.upvotes }}</span>
+                      </button>
+                      <button
+                        onclick="event.stopPropagation(); vote('{{ word.id }}', 'down')"
+                        class="flex items-center text-sm"
+                      >
+                        <i class="fas fa-thumbs-down text-red-400 mr-1"></i>
+                        <span>{{ word.downvotes }}</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -268,29 +265,403 @@
           {% endfor %}
         </div>
       </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div
+      id="loginModal"
+      class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full mx-4">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold">Login</h2>
+          <button id="closeLoginModal" class="text-gray-400 hover:text-white">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="loginForm" method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="block mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+          <input type="hidden" name="next" value="/" />
+          <button
+            type="submit"
+            class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 rounded-lg font-medium mb-4"
+          >
+            Login
+          </button>
+          <p class="text-center text-sm text-gray-400">
+            Don't have an account?
+            <button
+              id="switchToSignup"
+              type="button"
+              class="text-indigo-400 hover:text-indigo-300"
+            >
+              Sign up
+            </button>
+          </p>
+        </form>
+      </div>
     </div>
 
-    <script src="{% static 'js/jquery-1.10.2.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Signup Modal -->
+    <div
+      id="signupModal"
+      class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
+    >
+      <div class="bg-gray-800 rounded-xl p-8 max-w-md w-full mx-4">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold">Sign Up</h2>
+          <button id="closeSignupModal" class="text-gray-400 hover:text-white">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form id="signupForm" method="post" action="/admin/">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="block mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label class="block mb-2">Email</label>
+            <input
+              type="email"
+              name="email"
+              class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+          <div class="mb-6">
+            <label class="block mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+          <div class="mb-6 text-center text-sm text-yellow-400">
+            Note: Only administrators can create new accounts. Please contact
+            the site admin for access.
+          </div>
+          <button
+            type="button"
+            id="redirectToAdmin"
+            class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-medium mb-4"
+          >
+            Go to Admin
+          </button>
+          <p class="text-center text-sm text-gray-400">
+            Already have an account?
+            <button
+              id="switchToLogin"
+              type="button"
+              class="text-indigo-400 hover:text-indigo-300"
+            >
+              Login
+            </button>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6 mt-12">
+      <div class="container mx-auto px-6 text-center text-gray-400">
+        <p>© 2023 Crypto Urban Dictionary. All rights reserved.</p>
+        <div class="flex justify-center space-x-6 mt-4">
+          <a href="#" class="hover:text-white"
+            ><i class="fab fa-twitter"></i
+          ></a>
+          <a href="#" class="hover:text-white"
+            ><i class="fab fa-discord"></i
+          ></a>
+          <a href="#" class="hover:text-white"><i class="fab fa-github"></i></a>
+          <a href="#" class="hover:text-white"
+            ><i class="fab fa-telegram"></i
+          ></a>
+        </div>
+      </div>
+    </footer>
+
     <script>
-      function rotateCard(btn) {
-        var $card = $(btn).closest(".card-container");
-        if ($card.hasClass("hover")) {
-          $card.removeClass("hover");
-        } else {
-          $card.addClass("hover");
-        }
+      // Modal functionality
+      const loginBtn = document.getElementById("loginBtn");
+      const signupBtn = document.getElementById("signupBtn");
+      const loginModal = document.getElementById("loginModal");
+      const signupModal = document.getElementById("signupModal");
+      const closeLoginModal = document.getElementById("closeLoginModal");
+      const closeSignupModal = document.getElementById("closeSignupModal");
+      const switchToSignup = document.getElementById("switchToSignup");
+      const switchToLogin = document.getElementById("switchToLogin");
+      const redirectToAdmin = document.getElementById("redirectToAdmin");
+
+      // Search functionality
+      const searchContainer = document.getElementById("searchContainer");
+      const searchInput = document.getElementById("searchInput");
+      const searchBtn = document.getElementById("searchBtn");
+      const termsContainer = document.getElementById("termsContainer");
+      const termCards = document.querySelectorAll(".term-card");
+      let isSearchExpanded = false;
+
+      // Redirect to admin
+      if (redirectToAdmin) {
+        redirectToAdmin.addEventListener("click", () => {
+          window.location.href = "/admin/";
+        });
       }
 
+      // Search function
+      function searchTerms() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        if (searchTerm === "") {
+          // If search is empty, show all terms
+          termCards.forEach((card) => {
+            card.classList.remove("hidden-term");
+          });
+          return;
+        }
+
+        termCards.forEach((card) => {
+          const term = card.dataset.term.toLowerCase();
+          const definition = card.dataset.definition.toLowerCase();
+
+          if (term.includes(searchTerm) || definition.includes(searchTerm)) {
+            card.classList.remove("hidden-term");
+          } else {
+            card.classList.add("hidden-term");
+          }
+        });
+      }
+
+      // Toggle search bar
+      searchBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!isSearchExpanded) {
+          searchContainer.classList.remove("collapsed");
+          searchContainer.classList.add("expanded");
+          searchInput.classList.remove("opacity-0");
+          searchInput.focus();
+        } else {
+          searchTerms();
+        }
+        isSearchExpanded = !isSearchExpanded;
+      });
+
+      // Dynamic search as user types
+      searchInput.addEventListener("input", searchTerms);
+
+      // Close search when clicking outside
+      document.addEventListener("click", (e) => {
+        if (
+          isSearchExpanded &&
+          !searchContainer.contains(e.target) &&
+          e.target !== searchBtn
+        ) {
+          searchTerms();
+          if (searchInput.value === "") {
+            searchContainer.classList.remove("expanded");
+            searchContainer.classList.add("collapsed");
+            searchInput.classList.add("opacity-0");
+            isSearchExpanded = false;
+          }
+        }
+      });
+
+      // Show login modal
+      if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+          loginModal.classList.remove("hidden");
+        });
+      }
+
+      // Show signup modal
+      if (signupBtn) {
+        signupBtn.addEventListener("click", () => {
+          signupModal.classList.remove("hidden");
+        });
+      }
+
+      // Close login modal
+      closeLoginModal.addEventListener("click", () => {
+        loginModal.classList.add("hidden");
+      });
+
+      // Close signup modal
+      closeSignupModal.addEventListener("click", () => {
+        signupModal.classList.add("hidden");
+      });
+
+      // Switch to signup from login
+      switchToSignup.addEventListener("click", () => {
+        loginModal.classList.add("hidden");
+        signupModal.classList.remove("hidden");
+      });
+
+      // Switch to login from signup
+      switchToLogin.addEventListener("click", () => {
+        signupModal.classList.add("hidden");
+        loginModal.classList.remove("hidden");
+      });
+
+      // Close modals when clicking outside
+      window.addEventListener("click", (e) => {
+        if (e.target === loginModal) {
+          loginModal.classList.add("hidden");
+        }
+        if (e.target === signupModal) {
+          signupModal.classList.add("hidden");
+        }
+      });
+
+      // Vote functionality
       function vote(wordId, type) {
-        // Add AJAX call to handle voting
-        $.post("/vote/", {
-          word_id: wordId,
-          vote_type: type,
-          csrfmiddlewaretoken: "{{ csrf_token }}",
-        }).done(function (response) {
-          // Update vote counts
-          location.reload();
+        fetch("/vote/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: `word_id=${wordId}&vote_type=${type}`,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              location.reload();
+            }
+          });
+      }
+
+      // Form submission with AJAX
+      const addTermForm = document.getElementById("addTermForm");
+      if (addTermForm) {
+        addTermForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(addTermForm);
+
+          fetch("{% url 'submit_word' %}", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Create new term card
+                const newCard = document.createElement("div");
+                newCard.className = "flip-card term-card";
+                newCard.dataset.term = formData.get("word").toLowerCase();
+                newCard.dataset.definition = formData
+                  .get("definition")
+                  .toLowerCase();
+
+                const currentDate = new Date();
+                const formattedDate =
+                  currentDate.toLocaleString("default", { month: "short" }) +
+                  " " +
+                  currentDate.getDate();
+
+                newCard.innerHTML = `
+                <div class="flip-card-inner">
+                  <div class="flip-card-front bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-between">
+                    <div class="card-content">
+                      <h3 class="text-xl font-bold mb-2">${formData.get(
+                        "word"
+                      )}</h3>
+                      <div class="mt-2 mb-auto">
+                        ${
+                          formData.get("example")
+                            ? `<p class="text-gray-400 text-sm italic">"${formData.get(
+                                "example"
+                              )}"</p>`
+                            : ""
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flip-card-back bg-indigo-900 p-6 rounded-xl shadow-lg">
+                    <div class="card-content">
+                      <h3 class="text-xl font-bold mb-4">${formData.get(
+                        "word"
+                      )}</h3>
+                      <p class="text-sm definition-text">${formData.get(
+                        "definition"
+                      )}</p>
+                      <div class="flex justify-between mt-4 pt-4 border-t border-indigo-700">
+                        <div class="text-xs text-gray-400">
+                          <div>Published: ${formattedDate}</div>
+                          <div>By: ${data.creator || "Anonymous"}</div>
+                        </div>
+                        <div class="flex space-x-3 hidden">
+                          <button onclick="event.stopPropagation(); vote('${
+                            data.word_id
+                          }', 'up')" class="flex items-center text-sm">
+                            <i class="fas fa-thumbs-up text-green-400 mr-1"></i>
+                            <span>0</span>
+                          </button>
+                          <button onclick="event.stopPropagation(); vote('${
+                            data.word_id
+                          }', 'down')" class="flex items-center text-sm">
+                            <i class="fas fa-thumbs-down text-red-400 mr-1"></i>
+                            <span>0</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+                // Add new card to the beginning of the container
+                const termsContainer =
+                  document.getElementById("termsContainer");
+                termsContainer.insertBefore(newCard, termsContainer.firstChild);
+
+                // Clear the form
+                addTermForm.reset();
+
+                // Update word count if it exists
+                const wordCountElement = document.querySelector(
+                  "span.text-sm.text-gray-400"
+                );
+                if (wordCountElement) {
+                  const currentCount = parseInt(
+                    wordCountElement.textContent.match(/\d+/)[0]
+                  );
+                  wordCountElement.textContent = `${
+                    currentCount + 1
+                  } Buzzwords Defined!`;
+                }
+              } else {
+                alert("Error adding term: " + (data.error || "Unknown error"));
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("Error submitting term. Please try again.");
+            });
         });
       }
     </script>

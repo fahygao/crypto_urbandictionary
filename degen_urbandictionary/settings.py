@@ -132,3 +132,7 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_URL = 'login'  # URL where users will be redirected to log in
+LOGIN_REDIRECT_URL = 'index'  # URL to redirect after successful login
+LOGOUT_REDIRECT_URL = 'index'  # URL to redirect after logout
