@@ -1,0 +1,243 @@
+body {
+    font-family: 'Comic Sans MS', cursive;
+    background-image: url('https://web.archive.org/web/20010405074018im_/http://www.geocities.com/spunk111/glittertext/bkgrnd.gif');
+    background-repeat: repeat;
+    background-color: #000080; /* Dark blue background */
+    color: #FFFFFF; /* White text */
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #800080; /* Purple header */
+    color: #FFFF00; /* Yellow text */
+    text-align: center;
+    padding: 20px;
+    border-bottom: 5px dotted #FFFF00;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+nav {
+    margin-bottom: 15px;
+}
+
+.nav-link {
+    color: #FFFF00;
+    text-decoration: none;
+    padding: 5px;
+}
+
+main {
+    padding: 20px;
+}
+
+#search-bar {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#search-input {
+    padding: 10px;
+    width: 300px;
+    border: 2px dashed #FFFF00;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+#search-button {
+    padding: 10px 20px;
+    background-color: #008000; /* Green button */
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+
+#definition-area {
+    background-color: #ADD8E6; /* Light blue definition area */
+    color: #000000;
+    padding: 20px;
+    border: 3px double #800080;
+}
+
+#word-card {
+    background-color: #ADD8E6; /* Light blue definition area */
+    color: #000000;
+    padding: 20px;
+    border: 3px double #800080;
+    margin-bottom: 20px;
+}
+
+#word-card hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(to right, #800080, #0000FF, #00FFFF, #00FF00, #FFFF00, #FF0000, #800080); /* Blacklight color gradient */
+    margin: 10px 0;
+}
+
+#word-title {
+    font-size: 1.5em;
+    color: #800080;
+}
+
+#example-usage {
+    margin-top: 15px;
+    border-top: 2px dotted #800080;
+    padding-top: 10px;
+}
+
+#vote-area {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#upvote-button, #downvote-button {
+    padding: 10px 15px;
+    background-color: #FFFF00;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #800080;
+    color: #FFFF00;
+    border-top: 5px dotted #FFFF00;
+}
+
+#under-construction {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#under-construction img {
+    width: 100px; /* Adjust size as needed */
+}
+
+button {
+    font-family: 'Comic Sans MS', cursive;
+}
+
+#submit-form {
+    background-color: #ADD8E6; /* Light blue definition area */
+    color: #000000;
+    padding: 20px;
+    border: 3px double #800080;
+    margin: 20px auto;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+#submit-form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+#submit-form input[type="text"],
+#submit-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 2px dashed #FFFF00;
+    background-color: #FFFFFF;
+    color: #000000;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+#submit-form textarea {
+    height: 100px;
+}
+
+#submit-form button {
+    padding: 10px 20px;
+    background-color: #008000; /* Green button */
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+
+#login-button {
+    padding: 10px 20px;
+    background-color: #FFFF00; /* Yellow button */
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#comment-area {
+    margin-top: 20px;
+}
+
+#comment-list {
+    margin-bottom: 10px;
+}
+
+.comment {
+    border: 1px solid #800080;
+    padding: 5px;
+    margin-bottom: 5px;
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+    color: #000000; /* Ensure comment text is black */
+}
+
+.comment-vote-area {
+    text-align: right;
+}
+
+.comment-vote-button {
+    padding: 5px 10px;
+    background-color: #FFFF00;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.comment-score {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+#comment-input {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+}
+
+#comment-button {
+    padding: 10px 20px;
+    background-color: #008000; /* Green button */
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+
+/* Blinking text effect */
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .blink {
+    text-decoration: blink;
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
