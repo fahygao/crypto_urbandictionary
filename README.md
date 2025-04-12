@@ -52,7 +52,3 @@ Visit `http://localhost:8000` to start using the application.
 ## Contributing
 
 Contributions are welcome! Feel free to submit pull requests or open issues to discuss new features.
-
-## License
-
-[Your License Here]
