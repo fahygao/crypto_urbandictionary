@@ -32,6 +32,9 @@ db.sqlite3
 db.sqlite3-journal
 media
 
+# Static files (usually collected with collectstatic)
+/static/admin/
+
 # IDE
 .idea/
 .vscode/
