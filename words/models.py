@@ -11,6 +11,7 @@ class Definition(models.Model):
     upvotes = models.IntegerField(default=0)
     downvotes = models.IntegerField(default=0)
     creator = models.TextField(max_length=300, blank=True)
+    is_approved = models.BooleanField(default=False)
     
     def __str__(self):
         return self.word
