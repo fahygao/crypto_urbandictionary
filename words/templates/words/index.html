@@ -118,6 +118,11 @@
           display: block;
           height: 100%;
         }
+
+        /* Show the tap instruction text on mobile */
+        .hidden.md\:hidden {
+          display: flex !important;
+        }
       }
       .search-container {
         transition: all 0.3s ease;
@@ -293,6 +298,12 @@
                     </p>
                     {% endif %}
                   </div>
+                  <p
+                    class="hidden md:hidden text-indigo-400 text-xs flex items-center justify-end mt-4"
+                  >
+                    <i class="fas fa-hand-pointer mr-1"></i> Tap to See
+                    definition
+                  </p>
                 </div>
               </div>
               <div
@@ -672,6 +683,9 @@
                             : ""
                         }
                       </div>
+                      <p class="hidden md:hidden text-indigo-400 text-xs flex items-center justify-end mt-4">
+                        <i class="fas fa-hand-pointer mr-1"></i> Tap to See definition
+                      </p>
                     </div>
                   </div>
                   <div class="flip-card-back bg-indigo-900 p-6 rounded-xl shadow-lg">
